@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.3](https://github.com/Maxiviper117/composer-quarantine/compare/v0.1.2...v0.1.3) (2026-05-25)
+
+
+### Features
+
+* add composer wrapper flow ([#6](https://github.com/Maxiviper117/composer-quarantine/issues/6)) ([62fdf4c](https://github.com/Maxiviper117/composer-quarantine/commit/62fdf4c172c32e7541e0993436543751ece4ebae))
+
+
+### Miscellaneous Chores
+
+* remove documentation build job from CI workflow ([31a0dda](https://github.com/Maxiviper117/composer-quarantine/commit/31a0dda81cc5820dfe49ec47a4a892a629c24615))
+
 ## [0.1.2](https://github.com/Maxiviper117/composer-quarantine/compare/v0.1.1...v0.1.2) (2026-05-25)
 
 
