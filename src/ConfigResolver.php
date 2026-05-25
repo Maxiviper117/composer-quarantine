@@ -28,9 +28,21 @@ final class ConfigResolver
                 verbose: $config->verbose,
                 allowPrerelease: $config->allowPrerelease,
                 packagistRequestIntervalMilliseconds: $config->packagistRequestIntervalMilliseconds,
+                maxSuggestedVersionsToShow: $config->maxSuggestedVersionsToShow,
+                checkDependencies: $config->checkDependencies,
                 bypass: true,
             );
         }
+
+        return $config;
+    }
+
+    public function resolveForWorkingDirectory(string $workingDirectory): QuarantineConfig
+    {
+        $config = new QuarantineConfig();
+        $config = $this->applyGlobalComposerOverrides($config);
+        $config = $this->applyEnvOverrides($config);
+        $config = $this->applyProjectOverridesFromFile($workingDirectory . DIRECTORY_SEPARATOR . 'composer.json', $config);
 
         return $config;
     }
@@ -54,6 +66,8 @@ final class ConfigResolver
         $allowDev = $this->readBoolEnv('COMPOSER_QUARANTINE_ALLOW_DEV');
         $allowPrerelease = $this->readBoolEnv('COMPOSER_QUARANTINE_ALLOW_PRERELEASE');
         $packagistRequestIntervalMilliseconds = $this->readIntEnv('COMPOSER_QUARANTINE_PACKAGIST_REQUEST_INTERVAL_MS');
+        $maxSuggestedVersionsToShow = $this->readIntEnv('COMPOSER_QUARANTINE_MAX_SUGGESTED_VERSIONS_TO_SHOW');
+        $checkDependencies = $this->readBoolEnv('COMPOSER_QUARANTINE_CHECK_DEPENDENCIES');
         $ignoredPackages = $this->readListEnv('COMPOSER_QUARANTINE_IGNORED_PACKAGES');
 
         return new QuarantineConfig(
@@ -64,6 +78,8 @@ final class ConfigResolver
             verbose: $verbose ?? $config->verbose,
             allowPrerelease: $allowPrerelease ?? $config->allowPrerelease,
             packagistRequestIntervalMilliseconds: $packagistRequestIntervalMilliseconds ?? $config->packagistRequestIntervalMilliseconds,
+            maxSuggestedVersionsToShow: $maxSuggestedVersionsToShow ?? $config->maxSuggestedVersionsToShow,
+            checkDependencies: $checkDependencies ?? $config->checkDependencies,
             bypass: $config->bypass,
         );
     }
@@ -72,6 +88,33 @@ final class ConfigResolver
     {
         $extra = $composer->getPackage()->getExtra();
         $policy = $extra['composer-quarantine'] ?? [];
+
+        if (!is_array($policy)) {
+            return $config;
+        }
+
+        return $this->mergePolicy($config, $policy);
+    }
+
+    private function applyProjectOverridesFromFile(string $composerJsonPath, QuarantineConfig $config): QuarantineConfig
+    {
+        if (!is_file($composerJsonPath)) {
+            return $config;
+        }
+
+        try {
+            $contents = file_get_contents($composerJsonPath);
+
+            if ($contents === false || $contents === '') {
+                return $config;
+            }
+
+            $decoded = json_decode($contents, true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException) {
+            return $config;
+        }
+
+        $policy = $decoded['extra']['composer-quarantine'] ?? [];
 
         if (!is_array($policy)) {
             return $config;
@@ -171,6 +214,8 @@ final class ConfigResolver
             verbose: array_key_exists('verbose', $policy) ? (bool) $policy['verbose'] : $config->verbose,
             allowPrerelease: array_key_exists('allow-prerelease', $policy) ? (bool) $policy['allow-prerelease'] : $config->allowPrerelease,
             packagistRequestIntervalMilliseconds: array_key_exists('packagist-request-interval-ms', $policy) ? (int) $policy['packagist-request-interval-ms'] : $config->packagistRequestIntervalMilliseconds,
+            maxSuggestedVersionsToShow: array_key_exists('max-suggested-versions-to-show', $policy) ? (int) $policy['max-suggested-versions-to-show'] : $config->maxSuggestedVersionsToShow,
+            checkDependencies: array_key_exists('check-dependencies', $policy) ? (bool) $policy['check-dependencies'] : $config->checkDependencies,
             bypass: $config->bypass,
         );
     }
