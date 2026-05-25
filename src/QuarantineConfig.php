@@ -17,6 +17,8 @@ final readonly class QuarantineConfig
         public bool $verbose = false,
         public bool $allowPrerelease = false,
         public int $packagistRequestIntervalMilliseconds = 1000,
+        public int $maxSuggestedVersionsToShow = 20,
+        public bool $checkDependencies = true,
         public bool $bypass = false,
     ) {
     }

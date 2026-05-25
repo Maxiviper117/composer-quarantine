@@ -33,6 +33,13 @@ final class PackagistMetadataFetcher
         $cacheKey = strtolower($packageName) . ':' . ($includeDev ? 'dev' : 'stable');
 
         if ($this->cache->has($cacheKey)) {
+            if ($this->verbose) {
+                $this->io->writeError(sprintf(
+                    '<info>[Composer Quarantine]</info> cache hit for %s',
+                    $packageName
+                ), true, IOInterface::VERBOSE);
+            }
+
             return $this->cache->get($cacheKey);
         }
 

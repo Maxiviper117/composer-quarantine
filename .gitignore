@@ -33,5 +33,6 @@ testbench.yaml
 /.vitepress/cache
 /.vitepress/dist
 /coverage
-workbench/*
+workbench/
 .vitepress/.temp/*
+.composer-quarantine.json

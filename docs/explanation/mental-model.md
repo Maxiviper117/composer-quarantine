@@ -1,12 +1,13 @@
 # Mental Model
 
-Composer Quarantine does not block packages after installation.
+Composer Quarantine does not modify your package manifest.
 
-It works earlier, during dependency resolution:
+It works in two phases:
 
-1. Composer builds a candidate pool
-2. The plugin fetches Packagist release timestamps
-3. Versions younger than the threshold are removed
-4. Composer resolves against the remaining versions
+1. The wrapper runs a dry-run Composer solve
+2. It fetches Packagist release timestamps for the planned versions
+3. It flags any versions younger than the threshold
+4. You pick a safe version in the wrapper prompt
+5. The wrapper reruns Composer with exact version pins
 
-That means the solver never sees the quarantined version as an available choice.
+That means the final install is explicit, not a silent fallback chosen by the solver.

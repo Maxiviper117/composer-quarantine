@@ -1,15 +1,14 @@
 {
   "name": "maxiviper117/composer-quarantine",
   "description": "A global Composer plugin that quarantines freshly published package versions until they reach a minimum age.",
-  "type": "composer-plugin",
+  "type": "library",
   "license": "MIT",
   "require": {
     "php": "^8.3",
-    "composer-plugin-api": "^2.6",
+    "composer/composer": "^2.6",
     "composer/metadata-minifier": "^1.0"
   },
   "require-dev": {
-    "composer/composer": "^2.6",
     "pestphp/pest": "^4.0",
     "pestphp/pest-plugin": "^4.0"
   },
@@ -23,9 +22,9 @@
       "MaxiViper117\\ComposerQuarantine\\Tests\\": "tests/"
     }
   },
-  "extra": {
-    "class": "MaxiViper117\\ComposerQuarantine\\ComposerQuarantinePlugin"
-  },
+  "bin": [
+    "bin/composer-quarantine"
+  ],
   "scripts": {
     "test": "vendor/bin/pest"
   },
