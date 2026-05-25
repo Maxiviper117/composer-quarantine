@@ -97,5 +97,5 @@ If Packagist is unavailable and `fail-open` is enabled, the plugin warns and let
 ## Notes
 
 - Composer 2.6+ required
-- PHP 8.2+ required
+- PHP 8.3+ required
 - In-memory cache only in the initial release
