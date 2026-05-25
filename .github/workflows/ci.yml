@@ -33,7 +33,7 @@ jobs:
         run: composer validate --no-check-publish
 
       - name: Run tests
-        run: vendor/bin/pest --do-not-cache-result
+        run: vendor/bin/pest
 
   docs:
     runs-on: ubuntu-latest
