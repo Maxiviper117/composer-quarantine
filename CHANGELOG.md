@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.4](https://github.com/Maxiviper117/composer-quarantine/compare/v0.1.3...v0.1.4) (2026-05-26)
+
+
+### Miscellaneous Chores
+
+* update action versions in CI workflows ([d2cba68](https://github.com/Maxiviper117/composer-quarantine/commit/d2cba68c55534a4fc5ef65692f98fe5f4b38abfb))
+
 ## [0.1.3](https://github.com/Maxiviper117/composer-quarantine/compare/v0.1.2...v0.1.3) (2026-05-25)
 
 
